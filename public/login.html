@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+    />
+    <title>Login</title>
+    <style>
+      .holder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      code {
+        font-size: 9px !important;
+        overflow-x: scroll;
+      }
+    </style>
+  </head>
+  <body class="holder">
+    <div class="ui raised text container">
+      <div class="column">
+        <h1 class="ui header">Login</h1>
+        <div class="ui compact message hidden" id="message">
+          <p>
+            Message goes here...
+          </p>
+        </div>
+
+        <div class="ui styled fluid accordion">
+          <div class="active title">
+            <i class="dropdown icon"></i>
+            Username / Password
+          </div>
+          <div class="active content">
+            <form class="ui form padded" method="post" action="/login">
+              <div class="field">
+                <label>Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  required
+                  placeholder="Please enter your username or refresh token"
+                />
+              </div>
+              <div class="field">
+                <label>Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  required
+                  placeholder="Wh4t_i5_your_p@ssw0rd?"
+                />
+              </div>
+              <button class="ui button" type="submit">Submit</button>
+            </form>
+          </div>
+          <div class="title">
+            <i class="dropdown icon"></i>
+            Refresh token
+          </div>
+          <div class="content">
+            <form class="ui form padded" method="post" action="/login">
+              <div class="field">
+                <input type="hidden" name="refresh" value="1" />
+
+                <label>Refresh token</label>
+                <input
+                  type="text"
+                  name="refresh_token"
+                  required
+                  placeholder="Please enter the refresh token"
+                />
+              </div>
+              <button class="ui button" type="submit">Submit</button>
+            </form>
+          </div>
+        </div>
+
+        <code class="ui compact message hidden" id="authres">
+          Message goes here...
+        </code>
+      </div>
+    </div>
+  </body>
+  <script
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  <script>
+    $(".ui.accordion").accordion();
+
+    if (document.location.search.includes("error")) {
+      const m = document.getElementById("message");
+      m.style.display = "block";
+      const err = document.location.search.replace("?error=", "");
+      m.textContent = decodeURI(err);
+    }
+    if (document.location.search.includes("authres")) {
+      const m = document.getElementById("authres");
+      m.style.display = "block";
+      const err = document.location.search.replace("?authres=", "");
+      m.textContent = decodeURI(err);
+    }
+  </script>
+</html>
