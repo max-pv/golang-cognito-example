@@ -16,7 +16,7 @@ func (c *CognitoExample) Username(w http.ResponseWriter, r *http.Request) {
 	username := r.Form.Get("username")
 
 	_, err := c.CognitoClient.AdminGetUser(&cognito.AdminGetUserInput{
-		UserPoolID: aws.String(c.UserPoolID),
+		UserPoolId: aws.String(c.UserPoolID),
 		Username:   aws.String(username),
 	})
 
