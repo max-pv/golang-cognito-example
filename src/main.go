@@ -94,7 +94,7 @@ func main() {
 
 	port := os.Args[0]
 	if port == "" {
-		port = 8080
+		port = "8080"
 	}
 
 	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
