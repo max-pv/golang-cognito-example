@@ -41,7 +41,7 @@ func Stream(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, html)
 }
 
-// Call Dynamically calls method by path name
+// Call Dynamically calls method of CognitoExample by name
 func Call(c *CognitoExample, w http.ResponseWriter, r *http.Request) {
 	handler, ok := routes[r.URL.Path]
 	if !ok {
@@ -78,8 +78,12 @@ func main() {
 
 		switch r.Method {
 		case http.MethodGet:
+			// respond with static file
 			Stream(w, r)
 		case http.MethodPost:
+			// dynamically call methods of CognitoExample
+			// login -> c.Login(w, r)
+			// register -> c.Register(w, r)
 			Call(&c, w, r)
 		}
 	})
