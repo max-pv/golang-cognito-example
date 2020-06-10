@@ -28,6 +28,10 @@
         </div>
         <form class="ui form padded segment" method="post" action="/otp">
           <div class="field">
+            <label>Username</label>
+            <input type="text" name="otp" required placeholder="Username you user on /register page" id="username" />
+          </div>
+          <div class="field">
             <label>One time code</label>
             <input type="text" name="otp" required placeholder="XXXXXX" />
           </div>
@@ -37,11 +41,17 @@
     </div>
   </body>
   <script>
-    if (document.location.search.includes("error")) {
+    if (document.location.search.includes("message")) {
       const m = document.getElementById("message");
       m.style.display = "block";
-      const err = document.location.search.replace("?error=", "");
+      const err = document.location.search.replace("?message=", "");
       m.textContent = decodeURI(err);
+    }
+
+    if (document.location.search.includes("username")) {
+      const input = document.getElementById("username");
+      const username = document.location.search.replace("?username=", "");
+      input.value = decodeURI(username);
     }
   </script>
 </html>

@@ -26,7 +26,7 @@
         <h1 class="ui header">Register</h1>
         <div class="ui compact message" id="message">
           <p>
-            An error ocurred during your request.
+            An message ocurred during your request.
           </p>
         </div>
         <form class="ui form padded segment" method="post" action="/register">
@@ -63,10 +63,10 @@
     </div>
   </body>
   <script>
-    if (document.location.search.includes("error")) {
+    if (document.location.search.includes("message")) {
         const m = document.getElementById("message")
         m.style.display = "block"
-        const err = document.location.search.replace("?error=", "")
+        const err = document.location.search.replace("?message=", "")
         m.textContent = decodeURI(err);
     }
     </script>

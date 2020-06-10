@@ -25,7 +25,7 @@ func (c *CognitoExample) Username(w http.ResponseWriter, r *http.Request) {
 		if ok {
 			if awsErr.Code() == cognito.ErrCodeUserNotFoundException {
 				m := fmt.Sprintf("Username %s is free!", username)
-				http.Redirect(w, r, fmt.Sprintf("/username?error=%s", m), http.StatusSeeOther)
+				http.Redirect(w, r, fmt.Sprintf("/username?message=%s", m), http.StatusSeeOther)
 				return
 			}
 		} else {
@@ -35,5 +35,5 @@ func (c *CognitoExample) Username(w http.ResponseWriter, r *http.Request) {
 	}
 
 	m := fmt.Sprintf("Username %s is taken.", username)
-	http.Redirect(w, r, fmt.Sprintf("/username?error=%s", m), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/username?message=%s", m), http.StatusSeeOther)
 }

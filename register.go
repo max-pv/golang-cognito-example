@@ -31,12 +31,9 @@ func (c *CognitoExample) Register(w http.ResponseWriter, r *http.Request) {
 	_, err := c.CognitoClient.SignUp(user)
 	if err != nil {
 		fmt.Println(err)
-		http.Redirect(w, r, fmt.Sprintf("/register?error=%s", err.Error()), http.StatusSeeOther)
+		http.Redirect(w, r, fmt.Sprintf("/register?message=%s", err.Error()), http.StatusSeeOther)
 		return
 	}
 
-	c.RegFlow.Username = username
-
-	http.Redirect(w, r, "/otp", http.StatusFound)
-
+	http.Redirect(w, r, fmt.Sprintf("/otp?username=%s", username), http.StatusFound)
 }

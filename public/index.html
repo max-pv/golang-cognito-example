@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+    />
+    <title>Login</title>
+    <style>
+      .holder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      code {
+        font-size: 9px !important;
+        overflow-x: scroll;
+      }
+    </style>
+  </head>
+  <body class="holder">
+    <div class="ui raised text container">
+      <div class="column">
+        <h1 class="ui header">Golang Cognito Example</h1>
+        <p>Below you can find a list of pages that you can check out.</p>
+
+        <div class="ui divider"></div>
+
+        <div class="ui list">
+          <a class="item" href="/">
+            <i class="file icon"></i>
+            <div class="content">
+              <div class="header">index.html</div>
+              <div class="description">This page</div>
+            </div>
+          </a>
+          <a class="item" href="/username">
+            <i class="file icon"></i>
+            <div class="content">
+              <div class="header">username.html</div>
+              <div class="description">Check if username is taken</div>
+            </div>
+          </a>
+          <a class="item" href="/register">
+            <i class="file icon"></i>
+            <div class="content">
+              <div class="header">register.html</div>
+              <div class="description">Register a user</div>
+            </div>
+          </a>
+          <a class="item" href="/otp">
+            <i class="file icon"></i>
+            <div class="content">
+              <div class="header">otp.html</div>
+              <div class="description">Verify user's phone</div>
+            </div>
+          </a>
+          <a class="item" href="/login">
+            <i class="file icon"></i>
+            <div class="content">
+              <div class="header">login.html</div>
+              <div class="description">Login with a phone number or a refresh token</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <script
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  <script>
+    $(".ui.accordion").accordion();
+
+    if (document.location.search.includes("message")) {
+      const m = document.getElementById("message");
+      m.style.display = "block";
+      const err = document.location.search.replace("?message=", "");
+      m.textContent = decodeURI(err);
+    }
+    if (document.location.search.includes("authres")) {
+      const m = document.getElementById("authres");
+      m.style.display = "block";
+      const err = document.location.search.replace("?authres=", "");
+      m.textContent = decodeURI(err);
+    }
+  </script>
+</html>

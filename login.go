@@ -43,7 +43,7 @@ func (c *CognitoExample) Login(w http.ResponseWriter, r *http.Request) {
 	res, err := c.CognitoClient.InitiateAuth(authTry)
 	if err != nil {
 		fmt.Println(err)
-		http.Redirect(w, r, fmt.Sprintf("/login?error=%s", err.Error()), http.StatusSeeOther)
+		http.Redirect(w, r, fmt.Sprintf("/login?message=%s", err.Error()), http.StatusSeeOther)
 		return
 	}
 

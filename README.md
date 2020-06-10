@@ -1,5 +1,11 @@
 # Golang AWS Cognito Register, Verify phone number, Login and Get User example
 
+## Just Show Me
+
+If you are just curious how things work all together, you can find this example working at https://golang-cognito-example.herokuapp.com
+
+## Instructions
+
 This example code demonstrates how to use AWS Cognito with AWS Go SDK in a form of simple web pages where you can:
 
 1. Check if username is taken
@@ -19,4 +25,4 @@ go build -o ./build/cognito
 AWS_PROFILE=XXX COGNITO_APP_CLIENT_ID=XXX COGNITO_USER_POOL_ID=XXX PORT=8080 ./build/cognito
 ```
 
-Visit http://localhost:8080/register to see the registration page.
+Visit http://localhost:8080/ to see the list of available pages.

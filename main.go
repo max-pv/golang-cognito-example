@@ -5,6 +5,8 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"reflect"
+	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -14,13 +16,8 @@ import (
 // CognitoExample holds internals for auth flow.
 type CognitoExample struct {
 	CognitoClient *cognito.CognitoIdentityProvider
-	RegFlow       *regFlow
 	UserPoolID    string
 	AppClientID   string
-}
-
-type regFlow struct {
-	Username string
 }
 
 func stream(w http.ResponseWriter, r *http.Request) {
@@ -45,57 +42,34 @@ func main() {
 
 	c := CognitoExample{
 		CognitoClient: cognito.New(sess),
-		RegFlow:       &regFlow{},
 		UserPoolID:    os.Getenv("COGNITO_USER_POOL_ID"),
 		AppClientID:   os.Getenv("COGNITO_APP_CLIENT_ID"),
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/register", http.StatusPermanentRedirect)
-	})
-
-	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case http.MethodGet:
-			stream(w, r)
-		case http.MethodPost:
-			c.Register(w, r)
+		// Redirect all requests to root to index.html
+		if r.URL.Path == "/" {
+			r.URL.Path = "/index"
 		}
-	})
 
-	http.HandleFunc("/otp", func(w http.ResponseWriter, r *http.Request) {
-
-		if c.RegFlow.Username == "" {
-			http.Redirect(w, r, "/register?error=You must register before sending OTP.", http.StatusFound)
-		}
+		handler := strings.Title(strings.ReplaceAll(r.URL.Path, "/", ""))
+		// fmt.Printf("%#v\n", reflect.ValueOf(c).MethodByName("Login"))
 
 		switch r.Method {
 		case http.MethodGet:
 			stream(w, r)
 		case http.MethodPost:
-			c.OTP(w, r)
-		}
-	})
-
-	http.HandleFunc("/username", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case http.MethodGet:
-			stream(w, r)
-		case http.MethodPost:
-			c.Username(w, r)
-		}
-	})
-
-	http.HandleFunc("/login", func(w http.ResponseWriter, r *http.Request) {
-		switch r.Method {
-		case http.MethodGet:
-			stream(w, r)
-		case http.MethodPost:
-			c.Login(w, r)
+			reflect.ValueOf(&c).
+				MethodByName(handler).
+				Call([]reflect.Value{
+					reflect.ValueOf(w),
+					reflect.ValueOf(r),
+				})
 		}
 	})
 
 	addr := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	fmt.Printf("Starting Cognito Example on localhost%s...", addr)
 	err = http.ListenAndServe(addr, nil)
 	if err != nil {
 		panic(err.Error())
