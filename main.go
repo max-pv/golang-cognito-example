@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"reflect"
-	"strings"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -20,17 +19,42 @@ type CognitoExample struct {
 	AppClientID   string
 }
 
-func stream(w http.ResponseWriter, r *http.Request) {
+var routes = map[string]string{
+	"/login":    "Login",
+	"/otp":      "OTP",
+	"/register": "Register",
+	"/username": "Username",
+}
+
+// Stream responds with static HTML file
+func Stream(w http.ResponseWriter, r *http.Request) {
 	path := fmt.Sprintf("./public%s.html", r.URL.Path)
 
 	html, err := os.Open(path)
 	defer html.Close()
 	if err != nil {
 		http.Error(w, fmt.Sprintf("File %s not found", path), http.StatusNotFound)
+		return
 	}
 
 	w.Header().Set("Content-type", "text/html")
 	io.Copy(w, html)
+}
+
+// Call Dynamically calls method by path name
+func Call(c *CognitoExample, w http.ResponseWriter, r *http.Request) {
+	handler, ok := routes[r.URL.Path]
+	if !ok {
+		http.Error(w, fmt.Sprintf("Handler %s not found", r.URL.Path), http.StatusNotFound)
+		return
+	}
+
+	reflect.ValueOf(&c).
+		MethodByName(handler).
+		Call([]reflect.Value{
+			reflect.ValueOf(w),
+			reflect.ValueOf(r),
+		})
 }
 
 func main() {
@@ -52,19 +76,11 @@ func main() {
 			r.URL.Path = "/index"
 		}
 
-		handler := strings.Title(strings.ReplaceAll(r.URL.Path, "/", ""))
-		// fmt.Printf("%#v\n", reflect.ValueOf(c).MethodByName("Login"))
-
 		switch r.Method {
 		case http.MethodGet:
-			stream(w, r)
+			Stream(w, r)
 		case http.MethodPost:
-			reflect.ValueOf(&c).
-				MethodByName(handler).
-				Call([]reflect.Value{
-					reflect.ValueOf(w),
-					reflect.ValueOf(r),
-				})
+			Call(&c, w, r)
 		}
 	})
 
