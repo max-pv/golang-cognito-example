@@ -49,7 +49,7 @@ func Call(c *CognitoExample, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	reflect.ValueOf(&c).
+	reflect.ValueOf(c).
 		MethodByName(handler).
 		Call([]reflect.Value{
 			reflect.ValueOf(w),
