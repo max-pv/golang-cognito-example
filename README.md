@@ -13,8 +13,6 @@ You will also need to create App Client in User Pool without "Generate Secret Ke
 
 ## Build
 
-Go to `/src` folder and run:
-
 ```go
 go build -o ./build/cognito
 

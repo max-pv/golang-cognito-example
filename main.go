@@ -24,7 +24,7 @@ type regFlow struct {
 }
 
 func stream(w http.ResponseWriter, r *http.Request) {
-	path := fmt.Sprintf("../public%s.html", r.URL.Path)
+	path := fmt.Sprintf("./public%s.html", r.URL.Path)
 
 	html, err := os.Open(path)
 	defer html.Close()
@@ -37,7 +37,6 @@ func stream(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-
 	conf := &aws.Config{Region: aws.String("us-east-1")}
 	sess, err := session.NewSession(conf)
 	if err != nil {
@@ -50,6 +49,10 @@ func main() {
 		UserPoolID:    os.Getenv("COGNITO_USER_POOL_ID"),
 		AppClientID:   os.Getenv("COGNITO_APP_CLIENT_ID"),
 	}
+
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/register", http.StatusPermanentRedirect)
+	})
 
 	http.HandleFunc("/register", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {

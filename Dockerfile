@@ -1,6 +1,6 @@
 FROM golang:alpine
 WORKDIR /app
 ADD . .
-RUN cd ./src && go build -o ./build/golang-cognito-example
+RUN go build -o ./build/cognito
 EXPOSE 80
-cmd ["/app/src/build/golang-cognito-example 80"]
+CMD ["PORT=80 /app/src/build/cognito"]
