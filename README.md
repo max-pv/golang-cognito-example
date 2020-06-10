@@ -18,7 +18,7 @@ Go to `/src` folder and run:
 ```go
 go build -o ./build/cognito
 
-AWS_PROFILE=XXX COGNITO_APP_CLIENT_ID=XXX COGNITO_USER_POOL_ID=XXX ./build/cognito
+AWS_PROFILE=XXX COGNITO_APP_CLIENT_ID=XXX COGNITO_USER_POOL_ID=XXX PORT=8080 ./build/cognito
 ```
 
 Visit http://localhost:8080/register to see the registration page.
