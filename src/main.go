@@ -92,10 +92,11 @@ func main() {
 		}
 	})
 
-	port := os.Args[0]
-	if port == "" {
-		port = "8080"
+	port := "8080"
+	if os.Args[1] != "" {
+		port = os.Args[1]
 	}
 
-	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
+	addr := fmt.Sprintf(":%s", port)
+	http.ListenAndServe(addr, nil)
 }
