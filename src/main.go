@@ -92,5 +92,10 @@ func main() {
 		}
 	})
 
-	http.ListenAndServe(":8080", nil)
+	port := os.Args[0]
+	if port == "" {
+		port = 8080
+	}
+
+	http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 }
