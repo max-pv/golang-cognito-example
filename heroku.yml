@@ -1,7 +1,0 @@
-build:
-  docker:
-    web: Dockerfile
-  config:
-    PORT: 80
-run:
-  web: /app/src/build/golang-cognito-example 80
