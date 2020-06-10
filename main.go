@@ -82,8 +82,8 @@ func main() {
 			Stream(w, r)
 		case http.MethodPost:
 			// dynamically call methods of CognitoExample
-			// login -> c.Login(w, r)
-			// register -> c.Register(w, r)
+			// /login -> c.Login(w, r)
+			// /register -> c.Register(w, r)
 			Call(&c, w, r)
 		}
 	})
