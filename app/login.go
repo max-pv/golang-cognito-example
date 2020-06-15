@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -13,7 +13,7 @@ const flowUsernamePassword = "USER_PASSWORD_AUTH"
 const flowRefreshToken = "REFRESH_TOKEN_AUTH"
 
 // Login handles login scenario.
-func (c *CognitoExample) Login(w http.ResponseWriter, r *http.Request) {
+func (a *App) Login(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	username := r.Form.Get("username")
@@ -37,13 +37,13 @@ func (c *CognitoExample) Login(w http.ResponseWriter, r *http.Request) {
 	authTry := &cognito.InitiateAuthInput{
 		AuthFlow:       flow,
 		AuthParameters: params,
-		ClientId:       aws.String(c.AppClientID),
+		ClientId:       aws.String(a.AppClientID),
 	}
 
-	res, err := c.CognitoClient.InitiateAuth(authTry)
+	res, err := a.CognitoClient.InitiateAuth(authTry)
 	if err != nil {
 		fmt.Println(err)
-		http.Redirect(w, r, fmt.Sprintf("/login?error=%s", err.Error()), http.StatusSeeOther)
+		http.Redirect(w, r, fmt.Sprintf("/login?message=%s", err.Error()), http.StatusSeeOther)
 		return
 	}
 

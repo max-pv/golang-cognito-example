@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -11,12 +11,12 @@ import (
 )
 
 // Username handles username scenario.
-func (c *CognitoExample) Username(w http.ResponseWriter, r *http.Request) {
+func (a *App) Username(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	username := r.Form.Get("username")
 
-	_, err := c.CognitoClient.AdminGetUser(&cognito.AdminGetUserInput{
-		UserPoolId: aws.String(c.UserPoolID),
+	_, err := a.CognitoClient.AdminGetUser(&cognito.AdminGetUserInput{
+		UserPoolId: aws.String(a.UserPoolID),
 		Username:   aws.String(username),
 	})
 
@@ -25,7 +25,7 @@ func (c *CognitoExample) Username(w http.ResponseWriter, r *http.Request) {
 		if ok {
 			if awsErr.Code() == cognito.ErrCodeUserNotFoundException {
 				m := fmt.Sprintf("Username %s is free!", username)
-				http.Redirect(w, r, fmt.Sprintf("/username?error=%s", m), http.StatusSeeOther)
+				http.Redirect(w, r, fmt.Sprintf("/username?message=%s", m), http.StatusSeeOther)
 				return
 			}
 		} else {
@@ -35,5 +35,5 @@ func (c *CognitoExample) Username(w http.ResponseWriter, r *http.Request) {
 	}
 
 	m := fmt.Sprintf("Username %s is taken.", username)
-	http.Redirect(w, r, fmt.Sprintf("/username?error=%s", m), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/username?message=%s", m), http.StatusSeeOther)
 }

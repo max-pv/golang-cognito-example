@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -9,21 +9,22 @@ import (
 )
 
 // OTP handles phone verification step.
-func (c *CognitoExample) OTP(w http.ResponseWriter, r *http.Request) {
+func (a *App) OTP(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	otp := r.Form.Get("otp")
+	username := r.Form.Get("username")
 
 	user := &cognito.ConfirmSignUpInput{
 		ConfirmationCode: aws.String(otp),
-		Username:         aws.String(c.RegFlow.Username),
-		ClientId:         aws.String(c.AppClientID),
+		Username:         aws.String(username),
+		ClientId:         aws.String(a.AppClientID),
 	}
 
-	_, err := c.CognitoClient.ConfirmSignUp(user)
+	_, err := a.CognitoClient.ConfirmSignUp(user)
 	if err != nil {
 		fmt.Println(err)
-		http.Redirect(w, r, fmt.Sprintf("/otp?error=%s", err.Error()), http.StatusSeeOther)
+		http.Redirect(w, r, fmt.Sprintf("/otp?message=%s", err.Error()), http.StatusSeeOther)
 		return
 	}
 

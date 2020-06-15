@@ -33,14 +33,17 @@
           </div>
           <button class="ui button" type="submit">Submit</button>
         </form>
+        <p>
+          <a href="/">← Back to index</a>
+        </p>
       </div>
     </div>
   </body>
   <script>
-    if (document.location.search.includes("error")) {
+    if (document.location.search.includes("message")) {
       const m = document.getElementById("message");
       m.style.display = "block";
-      const err = document.location.search.replace("?error=", "");
+      const err = document.location.search.replace("?message=", "");
       m.textContent = decodeURI(err);
     }
   </script>

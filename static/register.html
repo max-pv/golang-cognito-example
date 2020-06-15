@@ -24,9 +24,10 @@
     <div class="ui raised text container">
       <div class="column">
         <h1 class="ui header">Register</h1>
+        <p>In case of successful registeration you will be redirected to /otp (phone number verification).</p>
         <div class="ui compact message" id="message">
           <p>
-            An error ocurred during your request.
+            An message ocurred during your request.
           </p>
         </div>
         <form class="ui form padded segment" method="post" action="/register">
@@ -59,14 +60,17 @@
           </div>
           <button class="ui button" type="submit">Submit</button>
         </form>
+        <p>
+          <a href="/">← Back to index</a>
+        </p>
       </div>
     </div>
   </body>
   <script>
-    if (document.location.search.includes("error")) {
+    if (document.location.search.includes("message")) {
         const m = document.getElementById("message")
         m.style.display = "block"
-        const err = document.location.search.replace("?error=", "")
+        const err = document.location.search.replace("?message=", "")
         m.textContent = decodeURI(err);
     }
     </script>
