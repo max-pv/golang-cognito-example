@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -11,12 +11,12 @@ import (
 )
 
 // Username handles username scenario.
-func (c *CognitoExample) Username(w http.ResponseWriter, r *http.Request) {
+func (a *App) Username(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	username := r.Form.Get("username")
 
-	_, err := c.CognitoClient.AdminGetUser(&cognito.AdminGetUserInput{
-		UserPoolId: aws.String(c.UserPoolID),
+	_, err := a.CognitoClient.AdminGetUser(&cognito.AdminGetUserInput{
+		UserPoolId: aws.String(a.UserPoolID),
 		Username:   aws.String(username),
 	})
 

@@ -5,30 +5,21 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"reflect"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	cognito "github.com/aws/aws-sdk-go/service/cognitoidentityprovider"
+	"github.com/br4in3x/golang-cognito-example/app"
 )
-
-// CognitoExample holds internals for auth flow.
-type CognitoExample struct {
-	CognitoClient *cognito.CognitoIdentityProvider
-	UserPoolID    string
-	AppClientID   string
-}
-
-var routes = map[string]string{
-	"/login":    "Login",
-	"/otp":      "OTP",
-	"/register": "Register",
-	"/username": "Username",
-}
 
 // Stream responds with static HTML file
 func Stream(w http.ResponseWriter, r *http.Request) {
-	path := fmt.Sprintf("./public%s.html", r.URL.Path)
+	// Redirect all requests to root to index.html
+	if r.URL.Path == "/" {
+		r.URL.Path = "/index"
+	}
+
+	path := fmt.Sprintf("./static%s.html", r.URL.Path)
 
 	html, err := os.Open(path)
 	defer html.Close()
@@ -41,20 +32,23 @@ func Stream(w http.ResponseWriter, r *http.Request) {
 	io.Copy(w, html)
 }
 
-// Call Dynamically calls method of CognitoExample by name
-func Call(c *CognitoExample, w http.ResponseWriter, r *http.Request) {
-	handler, ok := routes[r.URL.Path]
-	if !ok {
-		http.Error(w, fmt.Sprintf("Handler %s not found", r.URL.Path), http.StatusNotFound)
-		return
+// Call routes POST requests
+func Call(a *app.App, w http.ResponseWriter, r *http.Request) {
+
+	switch r.URL.Path {
+	case "/login":
+		a.Login(w, r)
+	case "/otp":
+		a.OTP(w, r)
+	case "/register":
+		a.Register(w, r)
+	case "/username":
+		a.Username(w, r)
+	default:
+		http.Error(w, fmt.Sprintf("Handler for POST %s not found", r.URL.Path), http.StatusNotFound)
 	}
 
-	reflect.ValueOf(c).
-		MethodByName(handler).
-		Call([]reflect.Value{
-			reflect.ValueOf(w),
-			reflect.ValueOf(r),
-		})
+	return
 }
 
 func main() {
@@ -64,27 +58,20 @@ func main() {
 		panic(err)
 	}
 
-	c := CognitoExample{
+	example := app.App{
 		CognitoClient: cognito.New(sess),
 		UserPoolID:    os.Getenv("COGNITO_USER_POOL_ID"),
 		AppClientID:   os.Getenv("COGNITO_APP_CLIENT_ID"),
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// Redirect all requests to root to index.html
-		if r.URL.Path == "/" {
-			r.URL.Path = "/index"
-		}
-
 		switch r.Method {
 		case http.MethodGet:
-			// respond with static file
+			// Respond with static file
 			Stream(w, r)
 		case http.MethodPost:
-			// dynamically call methods of CognitoExample
-			// /login -> c.Login(w, r)
-			// /register -> c.Register(w, r)
-			Call(&c, w, r)
+			// Handle html form submission
+			Call(&example, w, r)
 		}
 	})
 

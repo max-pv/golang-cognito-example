@@ -1,4 +1,4 @@
-package main
+package app
 
 import (
 	"fmt"
@@ -9,7 +9,7 @@ import (
 )
 
 // Register handles sign in scenario.
-func (c *CognitoExample) Register(w http.ResponseWriter, r *http.Request) {
+func (a *App) Register(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	username := r.Form.Get("username")
@@ -19,7 +19,7 @@ func (c *CognitoExample) Register(w http.ResponseWriter, r *http.Request) {
 	user := &cognito.SignUpInput{
 		Username: aws.String(username),
 		Password: aws.String(password),
-		ClientId: aws.String(c.AppClientID),
+		ClientId: aws.String(a.AppClientID),
 		UserAttributes: []*cognito.AttributeType{
 			{
 				Name:  aws.String("phone_number"),
@@ -28,7 +28,7 @@ func (c *CognitoExample) Register(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
-	_, err := c.CognitoClient.SignUp(user)
+	_, err := a.CognitoClient.SignUp(user)
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, r, fmt.Sprintf("/register?message=%s", err.Error()), http.StatusSeeOther)
