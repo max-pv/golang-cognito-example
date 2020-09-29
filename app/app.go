@@ -6,7 +6,8 @@ import (
 
 // App holds internals for auth flow.
 type App struct {
-	CognitoClient *cognito.CognitoIdentityProvider
-	UserPoolID    string
-	AppClientID   string
+	CognitoClient   *cognito.CognitoIdentityProvider
+	UserPoolID      string
+	AppClientID     string
+	AppClientSecret string
 }

@@ -59,9 +59,10 @@ func main() {
 	}
 
 	example := app.App{
-		CognitoClient: cognito.New(sess),
-		UserPoolID:    os.Getenv("COGNITO_USER_POOL_ID"),
-		AppClientID:   os.Getenv("COGNITO_APP_CLIENT_ID"),
+		CognitoClient:   cognito.New(sess),
+		UserPoolID:      os.Getenv("COGNITO_USER_POOL_ID"),
+		AppClientID:     os.Getenv("COGNITO_APP_CLIENT_ID"),
+		AppClientSecret: os.Getenv("COGNITO_APP_CLIENT_SECRET"),
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
