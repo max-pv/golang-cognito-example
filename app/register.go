@@ -28,6 +28,12 @@ func (a *App) Register(w http.ResponseWriter, r *http.Request) {
 		},
 	}
 
+	// Compute secret hash based on client secret.
+	if a.AppClientSecret != "" {
+		secretHash := computeSecretHash(a.AppClientSecret, username, a.AppClientID)
+		user.SecretHash = aws.String(secretHash)
+	}
+
 	_, err := a.CognitoClient.SignUp(user)
 	if err != nil {
 		fmt.Println(err)
