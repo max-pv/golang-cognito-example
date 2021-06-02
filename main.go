@@ -42,6 +42,8 @@ func Call(a *app.App, w http.ResponseWriter, r *http.Request) {
 		a.OTP(w, r)
 	case "/register":
 		a.Register(w, r)
+	case "/new_password_required":
+		a.NewPasswordRequired(w, r)
 	case "/username":
 		a.Username(w, r)
 	default:
@@ -52,7 +54,7 @@ func Call(a *app.App, w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	conf := &aws.Config{Region: aws.String("us-east-1")}
+	conf := &aws.Config{Region: aws.String(os.Getenv("AWS_REGION"))}
 	sess, err := session.NewSession(conf)
 	if err != nil {
 		panic(err)

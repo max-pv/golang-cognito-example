@@ -5,9 +5,11 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
+	"encoding/json"
 
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/aws/aws-sdk-go/aws"
 
@@ -67,6 +69,17 @@ func (a *App) Login(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println(err)
 		http.Redirect(w, r, fmt.Sprintf("/login?message=%s", err.Error()), http.StatusSeeOther)
+		return
+	}
+
+	if res.ChallengeName != nil && *res.ChallengeName == "NEW_PASSWORD_REQUIRED" {
+		params = map[string]*string{
+			"username": aws.String(username),
+			"session":  res.Session,
+		}
+		b, _ := json.Marshal(params)
+		s := url.QueryEscape(string(b))
+		http.Redirect(w, r, fmt.Sprintf("/new_password_required?params=%s", s), http.StatusFound)
 		return
 	}
 
