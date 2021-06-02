@@ -42,6 +42,8 @@ func Call(a *app.App, w http.ResponseWriter, r *http.Request) {
 		a.OTP(w, r)
 	case "/register":
 		a.Register(w, r)
+	case "/new_password_required":
+		a.NewPasswordRequired(w, r)
 	case "/username":
 		a.Username(w, r)
 	default:
