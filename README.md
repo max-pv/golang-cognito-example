@@ -1,10 +1,13 @@
 # Golang AWS Cognito Register, Verify phone number, Login and Get User example
 
-## Just Show Me
+<!-- ## Just Show Me
 
-If you are just curious how things work all together, you can find this example working at https://golang-cognito-example.herokuapp.com
+TODO: Deploy again according to https://www.reddit.com/r/golang/comments/10vr8oq/is_it_possible_to_host_a_golang_application_free/.
+Heroku is not providing free plan anymore.
 
-## Instructions
+If you are just curious how things work all together, you can find this example working at https://golang-cognito-example.herokuapp.com -->
+
+<!-- ## Instructions -->
 
 This example code demonstrates how to use AWS Cognito with AWS Go SDK in a form of simple web pages where you can:
 
@@ -43,3 +46,4 @@ AWS_PROFILE=XXX COGNITO_APP_CLIENT_ID=XXX COGNITO_APP_CLIENT_SECRET=XXX  COGNITO
 It's worth noting that in production environment you should not pass client secrets this way because with adequate permissions it's possible to read environmental variables of a running process. Also if you call a command that way, secret hash will be stored in your shell history. You should keep those issues in mind and mitigate them in your enviroment.
 
 Visit http://localhost:8080/ to see the list of available pages.
+
