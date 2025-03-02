@@ -1,13 +1,10 @@
 # Golang AWS Cognito Register, Verify phone number, Login and Get User example
 
-<!-- ## Just Show Me
+## Just Show Me
 
-TODO: Deploy again according to https://www.reddit.com/r/golang/comments/10vr8oq/is_it_possible_to_host_a_golang_application_free/.
-Heroku is not providing free plan anymore.
+If you are just curious how things work all together, you can find this example working at https://golang-cognito-example.fly.dev.
 
-If you are just curious how things work all together, you can find this example working at https://golang-cognito-example.herokuapp.com -->
-
-<!-- ## Instructions -->
+## Instructions
 
 This example code demonstrates how to use AWS Cognito with AWS Go SDK in a form of simple web pages where you can:
 
