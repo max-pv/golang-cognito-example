@@ -1,10 +1,12 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
+	"path/filepath"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -12,19 +14,33 @@ import (
 	"github.com/br4in3x/golang-cognito-example/app"
 )
 
-// Stream responds with static HTML file
-func Stream(w http.ResponseWriter, r *http.Request) {
-	// Redirect all requests to root to index.html
-	if r.URL.Path == "/" {
-		r.URL.Path = "/index"
+func getStaticFilePath(path string) (string, error) {
+	ex, err := os.Executable()
+	if err != nil {
+		return "", errors.New("can not get current executable path")
 	}
 
-	path := fmt.Sprintf("./static%s.html", r.URL.Path)
+	// Redirect all requests to root to index.html
+	if path == "/" {
+		path = "/index"
+	}
 
-	html, err := os.Open(path)
+	absFilePath := fmt.Sprintf("%s/static%s.html", filepath.Dir(ex), path)
+	return absFilePath, nil
+}
+
+// Stream responds with static HTML file
+func Stream(w http.ResponseWriter, r *http.Request) {
+	htmlFile, err := getStaticFilePath(r.URL.Path)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	html, err := os.Open(htmlFile)
 	defer html.Close()
 	if err != nil {
-		http.Error(w, fmt.Sprintf("File %s not found", path), http.StatusNotFound)
+		http.Error(w, fmt.Sprintf("File %s not found", htmlFile), http.StatusNotFound)
 		return
 	}
 
